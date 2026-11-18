@@ -27,6 +27,7 @@ namespace frmbootobios
         [DllImport("kernel32.dll", SetLastError = true)]
         private static extern bool GetFirmwareType(ref uint FirmwareType);
         private bool _vi = true;
+        private string _lastStatus = "ready";
 
         public Form1()
         {
@@ -49,6 +50,21 @@ namespace frmbootobios
             btnCheckWin11.Text = _vi ? "Kiểm tra Win 11" : "Check Win 11";
             btnCreateShortcut.Text = _vi ? "Tạo Shortcut" : "Create Shortcut";
             groupBox5.Text = _vi ? "Yêu cầu Windows 11" : "Windows 11 Requirements";
+            switch (_lastStatus)
+            {
+                case "uefi":
+                    lblStatusText.Text = _vi ? "Hệ thống đang chạy UEFI. Có thể tạo shortcut." : "System is running UEFI. You can create a shortcut.";
+                    break;
+                case "legacy":
+                    lblStatusText.Text = _vi ? "Phần cứng không hỗ trợ UEFI." : "Hardware does not support UEFI.";
+                    break;
+                case "mbr":
+                    lblStatusText.Text = _vi ? "Phần cứng hỗ trợ UEFI nhưng Windows đang chạy ở chế độ Legacy (MBR)." : "Hardware supports UEFI but Windows is running in Legacy (MBR) mode.";
+                    break;
+                default:
+                    lblStatusText.Text = _vi ? "Sẵn sàng kiểm tra..." : "Ready to check...";
+                    break;
+            }
         }
 
         private void lnkDonate_LinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
@@ -63,6 +79,7 @@ namespace frmbootobios
             if (!hardwareSupport)
             {
                 UpdateUI("Legacy Only", "Phần cứng không hỗ trợ UEFI.", Color.FromArgb(220, 170, 170));
+                _lastStatus = "legacy";
                 btnCreateShortcut.Visible = false;
                 return;
             }
@@ -72,15 +89,18 @@ namespace frmbootobios
             if (isWindowsUEFI)
             {
                 UpdateUI("UEFI Mode", "Hệ thống đang chạy UEFI. Có thể tạo shortcut.", Color.FromArgb(170, 220, 170));
+                _lastStatus = "uefi";
                 btnCreateShortcut.Visible = true;
-                
                 btnStartCheck.Enabled = false;
             }
             else
             {
                 UpdateUI("MBR/Legacy", "Phần cứng hỗ trợ UEFI nhưng Windows đang chạy ở chế độ Legacy (MBR).", Color.FromArgb(220, 210, 150));
+                _lastStatus = "mbr";
                 btnCreateShortcut.Visible = false;
-                MessageBox.Show("Để dùng shortcut, cần chuyển đĩa sang GPT và cài lại Windows ở chế độ UEFI.", "Lưu ý");
+                MessageBox.Show(
+                    _vi ? "Để dùng shortcut, cần chuyển đĩa sang GPT và cài lại Windows ở chế độ UEFI." : "To use the shortcut, convert the disk to GPT and reinstall Windows in UEFI mode.",
+                    _vi ? "Lưu ý" : "Note");
                 return;
             }
         }
