@@ -28,6 +28,11 @@ namespace frmbootobios
         private static extern bool GetFirmwareType(ref uint FirmwareType);
         private bool _vi = true;
         private string _lastStatus = "ready";
+        private bool _win11Checked = false;
+        private bool _alreadyWin11 = false;
+        private bool _win11Ready = false;
+        private bool _w11Uefi, _w11Tpm, _w11Secure, _w11Gpt, _w11Ram, _w11Cpu;
+        private string _w11OsCaption = "", _w11OsArch = "";
 
         public Form1()
         {
@@ -65,6 +70,8 @@ namespace frmbootobios
                     lblStatusText.Text = _vi ? "Sẵn sàng kiểm tra..." : "Ready to check...";
                     break;
             }
+            if (_win11Checked)
+                RefreshWin11Labels();
         }
 
         private void lnkDonate_LinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
@@ -208,117 +215,122 @@ namespace frmbootobios
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Tạo shortcut thất bại: " + ex.Message);
+                MessageBox.Show(
+                    (_vi ? "Tạo shortcut thất bại: " : "Failed to create shortcut: ") + ex.Message);
             }
         }
 
         private void btnCheckWin11_Click(object sender, EventArgs e)
         {
             // Source - https://stackoverflow.com/a/50224392 (Rovann Linhalis, CC BY-SA 4.0)
-            string osCaption = "";
-            string osArch = "";
+            _w11OsCaption = "";
+            _w11OsArch = "";
             try
             {
                 using (var osSearcher = new ManagementObjectSearcher("SELECT Caption, OSArchitecture FROM Win32_OperatingSystem"))
                 {
                     foreach (ManagementObject obj in osSearcher.Get())
                     {
-                        osCaption = obj["Caption"]?.ToString() ?? "";
-                        osArch = obj["OSArchitecture"]?.ToString() ?? "";
+                        _w11OsCaption = obj["Caption"]?.ToString() ?? "";
+                        _w11OsArch = obj["OSArchitecture"]?.ToString() ?? "";
                         break;
                     }
                 }
             }
             catch { }
-            lblW11OsVersion.Text = "HĐH: " + osCaption + (osArch.Length > 0 ? " – " + osArch : "");
 
-            bool alreadyWin11 = osCaption.IndexOf("Windows 11", StringComparison.OrdinalIgnoreCase) >= 0;
+            _alreadyWin11 = _w11OsCaption.IndexOf("Windows 11", StringComparison.OrdinalIgnoreCase) >= 0;
+            _w11Uefi = CheckWindowsBootMode();
 
-            bool uefi = CheckWindowsBootMode();
-
-            bool tpm2 = false;
+            _w11Tpm = false;
             try
             {
                 var searcher = new ManagementObjectSearcher(@"root\CIMv2\Security\MicrosoftTpm", "SELECT * FROM Win32_Tpm");
                 foreach (ManagementObject obj in searcher.Get())
                 {
                     string spec = obj["SpecVersion"]?.ToString() ?? "";
-                    tpm2 = spec.StartsWith("2.");
+                    _w11Tpm = spec.StartsWith("2.");
                     break;
                 }
             }
             catch { }
 
-            bool secureBoot = false;
+            _w11Secure = false;
             try
             {
                 using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\SecureBoot\State"))
                     if (key != null)
-                        secureBoot = (int)key.GetValue("UEFISecureBootEnabled", 0) == 1;
+                        _w11Secure = (int)key.GetValue("UEFISecureBootEnabled", 0) == 1;
             }
             catch { }
 
-            bool gpt = false;
+            _w11Gpt = false;
             try
             {
                 var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_DiskPartition WHERE DiskIndex=0");
                 foreach (ManagementObject obj in searcher.Get())
                 {
-                    if ((obj["Type"]?.ToString() ?? "").StartsWith("GPT:")) { gpt = true; break; }
+                    if ((obj["Type"]?.ToString() ?? "").StartsWith("GPT:")) { _w11Gpt = true; break; }
                 }
             }
             catch { }
 
-            bool ram4gb = false;
+            _w11Ram = false;
             try
             {
                 var searcher = new ManagementObjectSearcher("SELECT TotalPhysicalMemory FROM Win32_ComputerSystem");
                 foreach (ManagementObject obj in searcher.Get())
                 {
-                    ram4gb = (ulong)obj["TotalPhysicalMemory"] >= 4UL * 1024 * 1024 * 1024;
+                    _w11Ram = (ulong)obj["TotalPhysicalMemory"] >= 4UL * 1024 * 1024 * 1024;
                     break;
                 }
             }
             catch { }
 
-            bool cpu64 = false;
+            _w11Cpu = false;
             try
             {
                 var searcher = new ManagementObjectSearcher("SELECT AddressWidth FROM Win32_Processor");
                 foreach (ManagementObject obj in searcher.Get())
                 {
-                    cpu64 = (ushort)obj["AddressWidth"] == 64;
+                    _w11Cpu = (ushort)obj["AddressWidth"] == 64;
                     break;
                 }
             }
             catch { }
 
-            SetCheck(lblW11Uefi, uefi, "UEFI");
-            SetCheck(lblW11Tpm, tpm2, "TPM 2.0");
-            SetCheck(lblW11SecureBoot, secureBoot, "Secure Boot");
-            SetCheck(lblW11Gpt, gpt, "Ổ đĩa GPT");
-            SetCheck(lblW11Ram, ram4gb, "RAM ≥ 4 GB");
-            SetCheck(lblW11Cpu, cpu64, "CPU 64-bit");
+            _win11Ready = _w11Uefi && _w11Tpm && _w11Secure && _w11Gpt && _w11Ram && _w11Cpu;
+            _win11Checked = true;
 
-            bool ready = uefi && tpm2 && secureBoot && gpt && ram4gb && cpu64;
-            if (alreadyWin11)
+            groupBox5.Visible = true;
+            this.ClientSize = new System.Drawing.Size(480, 430);
+            RefreshWin11Labels();
+        }
+
+        private void RefreshWin11Labels()
+        {
+            lblW11OsVersion.Text = (_vi ? "HĐH: " : "OS: ") + _w11OsCaption + (_w11OsArch.Length > 0 ? " – " + _w11OsArch : "");
+            SetCheck(lblW11Uefi, _w11Uefi, "UEFI");
+            SetCheck(lblW11Tpm, _w11Tpm, "TPM 2.0");
+            SetCheck(lblW11SecureBoot, _w11Secure, "Secure Boot");
+            SetCheck(lblW11Gpt, _w11Gpt, _vi ? "Ổ đĩa GPT" : "GPT Disk");
+            SetCheck(lblW11Ram, _w11Ram, "RAM ≥ 4 GB");
+            SetCheck(lblW11Cpu, _w11Cpu, "CPU 64-bit");
+            if (_alreadyWin11)
             {
-                lblW11Result.Text = "✓  Máy đang chạy Windows 11";
+                lblW11Result.Text = _vi ? "✓  Máy đang chạy Windows 11" : "✓  Already running Windows 11";
                 lblW11Result.ForeColor = Color.DarkGreen;
             }
-            else if (ready)
+            else if (_win11Ready)
             {
-                lblW11Result.Text = "✓  Máy có thể nâng cấp Windows 11";
+                lblW11Result.Text = _vi ? "✓  Máy có thể nâng cấp Windows 11" : "✓  PC meets Windows 11 requirements";
                 lblW11Result.ForeColor = Color.DarkGreen;
             }
             else
             {
-                lblW11Result.Text = "✗  Chưa đủ điều kiện nâng cấp Windows 11";
+                lblW11Result.Text = _vi ? "✗  Chưa đủ điều kiện nâng cấp Windows 11" : "✗  PC does not meet Windows 11 requirements";
                 lblW11Result.ForeColor = Color.DarkRed;
             }
-
-            groupBox5.Visible = true;
-            this.ClientSize = new System.Drawing.Size(480, 430);
         }
 
         private void SetCheck(Label lbl, bool ok, string name)

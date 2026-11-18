@@ -210,13 +210,16 @@ namespace frmbootobios
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Tạo shortcut thất bại: " + ex.Message);
+                MessageBox.Show(
+                    (_vi ? "Tạo shortcut thất bại: " : "Failed to create shortcut: ") + ex.Message);
             }
         }
 
         private void btnCheckWin11_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Tính năng này chỉ có trong bản NET40.", "Thông báo");
+            MessageBox.Show(
+                _vi ? "Tính năng này chỉ có trong bản NET40." : "This feature is only available in the NET40 build.",
+                _vi ? "Thông báo" : "Notice");
         }
 
         private void Form1_Load(object sender, EventArgs e)
