@@ -114,32 +114,47 @@
             //
             // btnStartCheck
             //
+            this.btnStartCheck.BackColor = System.Drawing.Color.FromArgb(0, 99, 177);
+            this.btnStartCheck.FlatAppearance.BorderSize = 0;
+            this.btnStartCheck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnStartCheck.ForeColor = System.Drawing.Color.White;
+            this.btnStartCheck.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
             this.btnStartCheck.Location = new System.Drawing.Point(8, 46);
             this.btnStartCheck.Name = "btnStartCheck";
             this.btnStartCheck.Size = new System.Drawing.Size(84, 44);
             this.btnStartCheck.TabIndex = 2;
             this.btnStartCheck.Text = "Kiểm tra BIOS";
-            this.btnStartCheck.UseVisualStyleBackColor = true;
+            this.btnStartCheck.UseVisualStyleBackColor = false;
             this.btnStartCheck.Click += new System.EventHandler(this.btnStartCheck_Click);
             //
             // btnCheckWin11
             //
+            this.btnCheckWin11.BackColor = System.Drawing.Color.FromArgb(96, 60, 160);
+            this.btnCheckWin11.FlatAppearance.BorderSize = 0;
+            this.btnCheckWin11.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCheckWin11.ForeColor = System.Drawing.Color.White;
+            this.btnCheckWin11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
             this.btnCheckWin11.Location = new System.Drawing.Point(175, 46);
             this.btnCheckWin11.Name = "btnCheckWin11";
             this.btnCheckWin11.Size = new System.Drawing.Size(120, 44);
             this.btnCheckWin11.TabIndex = 4;
             this.btnCheckWin11.Text = "Kiểm tra Win 11";
-            this.btnCheckWin11.UseVisualStyleBackColor = true;
+            this.btnCheckWin11.UseVisualStyleBackColor = false;
             this.btnCheckWin11.Click += new System.EventHandler(this.btnCheckWin11_Click);
             //
             // btnCreateShortcut
             //
+            this.btnCreateShortcut.BackColor = System.Drawing.Color.FromArgb(16, 124, 16);
+            this.btnCreateShortcut.FlatAppearance.BorderSize = 0;
+            this.btnCreateShortcut.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCreateShortcut.ForeColor = System.Drawing.Color.White;
+            this.btnCreateShortcut.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
             this.btnCreateShortcut.Location = new System.Drawing.Point(380, 46);
             this.btnCreateShortcut.Name = "btnCreateShortcut";
             this.btnCreateShortcut.Size = new System.Drawing.Size(84, 44);
             this.btnCreateShortcut.TabIndex = 3;
             this.btnCreateShortcut.Text = "Tạo Shortcut";
-            this.btnCreateShortcut.UseVisualStyleBackColor = true;
+            this.btnCreateShortcut.UseVisualStyleBackColor = false;
             this.btnCreateShortcut.Click += new System.EventHandler(this.btnCreateShortcut_Click);
             //
             // groupBox5
