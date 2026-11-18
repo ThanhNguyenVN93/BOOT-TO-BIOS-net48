@@ -26,12 +26,34 @@ namespace frmbootobios
         // Win8+ API: 1=Legacy/BIOS, 2=UEFI
         [DllImport("kernel32.dll", SetLastError = true)]
         private static extern bool GetFirmwareType(ref uint FirmwareType);
+        private bool _vi = true;
+
         public Form1()
         {
             InitializeComponent();
             this.BackColor = Color.FromArgb(220, 235, 250); // NET40: xanh dương nhạt
             lblStatusText.Text = "Sẵn sàng kiểm tra...";
             btnCreateShortcut.Visible = false;
+        }
+
+        private void btnLang_Click(object sender, EventArgs e)
+        {
+            _vi = !_vi;
+            ApplyLanguage();
+        }
+
+        private void ApplyLanguage()
+        {
+            btnLang.Text = _vi ? "EN" : "VI";
+            btnStartCheck.Text = _vi ? "Kiểm tra BIOS" : "Check BIOS";
+            btnCheckWin11.Text = _vi ? "Kiểm tra Win 11" : "Check Win 11";
+            btnCreateShortcut.Text = _vi ? "Tạo Shortcut" : "Create Shortcut";
+            groupBox5.Text = _vi ? "Yêu cầu Windows 11" : "Windows 11 Requirements";
+        }
+
+        private void lnkDonate_LinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://nguyenthanhdev.com/donate");
         }
 
         private void btnStartCheck_Click(object sender, EventArgs e)
@@ -150,7 +172,18 @@ namespace frmbootobios
                 shortcut.IconLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "shell32.dll") + ",238";
                 shortcut.Save();
 
-                MessageBox.Show("Đã tạo shortcut trên Desktop!", "Thành công!");
+                MessageBox.Show(
+                    _vi ? "Đã tạo shortcut trên Desktop!" : "Shortcut created on Desktop!",
+                    _vi ? "Thành công!" : "Success!");
+                var boot = MessageBox.Show(
+                    _vi ? "Bạn có muốn boot vào BIOS ngay bây giờ không?" : "Do you want to boot into BIOS right now?",
+                    _vi ? "Boot vào BIOS?" : "Boot to BIOS?",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (boot == DialogResult.Yes)
+                {
+                    string shutdownPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "shutdown.exe");
+                    RunCommand(shutdownPath, "/r /fw /t 0");
+                }
                 Application.Exit();
             }
             catch (Exception ex)
@@ -265,7 +298,7 @@ namespace frmbootobios
             }
 
             groupBox5.Visible = true;
-            this.ClientSize = new System.Drawing.Size(480, 396);
+            this.ClientSize = new System.Drawing.Size(480, 430);
         }
 
         private void SetCheck(Label lbl, bool ok, string name)

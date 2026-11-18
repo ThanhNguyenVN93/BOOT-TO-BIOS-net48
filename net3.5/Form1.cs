@@ -23,12 +23,33 @@ namespace frmbootobios
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern bool Wow64RevertWow64FsRedirection(IntPtr ptr);
 
+        private bool _vi = true;
+
         public Form1()
         {
             InitializeComponent();
             this.BackColor = Color.FromArgb(250, 240, 210); // NET35: vàng ấm nhạt
             lblStatusText.Text = "Sẵn sàng kiểm tra...";
             btnCreateShortcut.Visible = false;
+        }
+
+        private void btnLang_Click(object sender, EventArgs e)
+        {
+            _vi = !_vi;
+            ApplyLanguage();
+        }
+
+        private void ApplyLanguage()
+        {
+            btnLang.Text = _vi ? "EN" : "VI";
+            btnStartCheck.Text = _vi ? "Kiểm tra BIOS" : "Check BIOS";
+            btnCheckWin11.Text = _vi ? "Kiểm tra Win 11" : "Check Win 11";
+            btnCreateShortcut.Text = _vi ? "Tạo Shortcut" : "Create Shortcut";
+        }
+
+        private void lnkDonate_LinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://nguyenthanhdev.com/donate");
         }
 
         private void btnStartCheck_Click(object sender, EventArgs e)
@@ -152,7 +173,18 @@ namespace frmbootobios
                     new object[] { Path.Combine(Path.Combine(Environment.GetEnvironmentVariable("SystemRoot"), "System32"), "shell32.dll") + ",238" });
                 shortcutType.InvokeMember("Save", BindingFlags.InvokeMethod, null, shortcut, null);
 
-                MessageBox.Show("Đã tạo shortcut trên Desktop!", "Thành công!");
+                MessageBox.Show(
+                    _vi ? "Đã tạo shortcut trên Desktop!" : "Shortcut created on Desktop!",
+                    _vi ? "Thành công!" : "Success!");
+                var boot = MessageBox.Show(
+                    _vi ? "Bạn có muốn boot vào BIOS ngay bây giờ không?" : "Do you want to boot into BIOS right now?",
+                    _vi ? "Boot vào BIOS?" : "Boot to BIOS?",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (boot == DialogResult.Yes)
+                {
+                    string shutdownPath = Path.Combine(Path.Combine(Environment.GetEnvironmentVariable("SystemRoot"), "System32"), "shutdown.exe");
+                    RunCommand(shutdownPath, "/r /fw /t 0");
+                }
                 Application.Exit();
             }
             catch (Exception ex)

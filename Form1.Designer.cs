@@ -40,6 +40,8 @@
             this.btnStartCheck = new System.Windows.Forms.Button();
             this.btnCreateShortcut = new System.Windows.Forms.Button();
             this.btnCheckWin11 = new System.Windows.Forms.Button();
+            this.btnLang = new System.Windows.Forms.Button();
+            this.lnkDonate = new System.Windows.Forms.LinkLabel();
             this.lblW11Uefi = new System.Windows.Forms.Label();
             this.lblW11Tpm = new System.Windows.Forms.Label();
             this.lblW11SecureBoot = new System.Windows.Forms.Label();
@@ -257,11 +259,39 @@
             this.lblW11Result.Text = "";
             this.lblW11Result.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             //
+            // btnLang
+            //
+            this.btnLang.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnLang.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+            this.btnLang.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLang.Location = new System.Drawing.Point(5, 253);
+            this.btnLang.Name = "btnLang";
+            this.btnLang.Size = new System.Drawing.Size(45, 22);
+            this.btnLang.TabIndex = 10;
+            this.btnLang.Text = "EN";
+            this.btnLang.UseVisualStyleBackColor = true;
+            this.btnLang.Click += new System.EventHandler(this.btnLang_Click);
+            //
+            // lnkDonate
+            //
+            this.lnkDonate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lnkDonate.AutoSize = true;
+            this.lnkDonate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.lnkDonate.Location = new System.Drawing.Point(360, 258);
+            this.lnkDonate.Name = "lnkDonate";
+            this.lnkDonate.Size = new System.Drawing.Size(60, 15);
+            this.lnkDonate.TabIndex = 11;
+            this.lnkDonate.TabStop = true;
+            this.lnkDonate.Text = "☕ Donate";
+            this.lnkDonate.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkDonate_LinkClicked);
+            //
             // Form1
             //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(480, 396);
+            this.ClientSize = new System.Drawing.Size(480, 285);
+            this.Controls.Add(this.lnkDonate);
+            this.Controls.Add(this.btnLang);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox2);
@@ -279,6 +309,7 @@
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -302,6 +333,8 @@
         private System.Windows.Forms.Label lblW11Cpu;
         private System.Windows.Forms.Label lblW11Result;
         private System.Windows.Forms.Label lblW11OsVersion;
+        private System.Windows.Forms.Button btnLang;
+        private System.Windows.Forms.LinkLabel lnkDonate;
     }
 }
 
