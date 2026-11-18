@@ -62,6 +62,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.BackColor = System.Drawing.Color.FromArgb(245, 245, 245);
             this.groupBox1.Controls.Add(this.lblHeader);
             this.groupBox1.Location = new System.Drawing.Point(3, 1);
             this.groupBox1.Name = "groupBox1";
@@ -71,6 +72,7 @@
             //
             // groupBox2
             //
+            this.groupBox2.BackColor = System.Drawing.Color.FromArgb(245, 245, 245);
             this.groupBox2.Controls.Add(this.btnCreateShortcut);
             this.groupBox2.Controls.Add(this.btnCheckWin11);
             this.groupBox2.Controls.Add(this.btnStartCheck);
@@ -82,6 +84,7 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.BackColor = System.Drawing.Color.FromArgb(245, 245, 245);
             this.groupBox4.Controls.Add(this.lblStatusText);
             this.groupBox4.Location = new System.Drawing.Point(3, 190);
             this.groupBox4.Name = "groupBox4";
@@ -141,6 +144,7 @@
             //
             // groupBox5
             //
+            this.groupBox5.BackColor = System.Drawing.Color.FromArgb(245, 245, 245);
             this.groupBox5.Controls.Add(this.lblW11Result);
             this.groupBox5.Controls.Add(this.lblW11Cpu);
             this.groupBox5.Controls.Add(this.lblW11Ram);
