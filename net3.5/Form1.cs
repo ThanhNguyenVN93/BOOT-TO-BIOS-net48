@@ -26,6 +26,7 @@ namespace frmbootobios
         public Form1()
         {
             InitializeComponent();
+            this.BackColor = Color.FromArgb(250, 240, 210); // NET35: vàng ấm nhạt
             lblStatusText.Text = "Sẵn sàng kiểm tra...";
             btnCreateShortcut.Visible = false;
         }
@@ -36,7 +37,7 @@ namespace frmbootobios
 
             if (!hardwareSupport)
             {
-                UpdateUI("Legacy Only", "Phần cứng không hỗ trợ UEFI.", Color.LightCoral);
+                UpdateUI("Legacy Only", "Phần cứng không hỗ trợ UEFI.", Color.FromArgb(220, 170, 170));
                 btnCreateShortcut.Visible = false;
                 return;
             }
@@ -45,13 +46,13 @@ namespace frmbootobios
 
             if (isWindowsUEFI)
             {
-                UpdateUI("UEFI Mode", "Hệ thống đang chạy UEFI. Có thể tạo shortcut.", Color.LightGreen);
+                UpdateUI("UEFI Mode", "Hệ thống đang chạy UEFI. Có thể tạo shortcut.", Color.FromArgb(170, 220, 170));
                 btnCreateShortcut.Visible = true;
                 btnStartCheck.Enabled = false;
             }
             else
             {
-                UpdateUI("MBR/Legacy", "Phần cứng hỗ trợ UEFI nhưng Windows đang chạy ở chế độ Legacy (MBR).", Color.Khaki);
+                UpdateUI("MBR/Legacy", "Phần cứng hỗ trợ UEFI nhưng Windows đang chạy ở chế độ Legacy (MBR).", Color.FromArgb(220, 210, 150));
                 btnCreateShortcut.Visible = false;
                 MessageBox.Show("Để dùng shortcut, cần chuyển đĩa sang GPT và cài lại Windows ở chế độ UEFI.", "Lưu ý");
                 return;
