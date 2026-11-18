@@ -277,7 +277,7 @@
             this.lnkDonate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lnkDonate.AutoSize = true;
             this.lnkDonate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.lnkDonate.Location = new System.Drawing.Point(360, 258);
+            this.lnkDonate.Location = new System.Drawing.Point(408, 258);
             this.lnkDonate.Name = "lnkDonate";
             this.lnkDonate.Size = new System.Drawing.Size(60, 15);
             this.lnkDonate.TabIndex = 11;
