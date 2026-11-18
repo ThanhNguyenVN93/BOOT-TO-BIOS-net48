@@ -26,7 +26,7 @@ namespace frmbootobios
         public Form1()
         {
             InitializeComponent();
-            lblStatusText.Text = "Ready to run system check...";
+            lblStatusText.Text = "Sẵn sàng kiểm tra...";
             btnCreateShortcut.Visible = false;
         }
 
@@ -36,7 +36,7 @@ namespace frmbootobios
 
             if (!hardwareSupport)
             {
-                UpdateUI("Legacy Only", "Hardware does not support UEFI.", Color.LightCoral);
+                UpdateUI("Legacy Only", "Phần cứng không hỗ trợ UEFI.", Color.LightCoral);
                 btnCreateShortcut.Visible = false;
                 return;
             }
@@ -45,15 +45,15 @@ namespace frmbootobios
 
             if (isWindowsUEFI)
             {
-                UpdateUI("UEFI Mode", "System is running UEFI. You can create a shortcut.", Color.LightGreen);
+                UpdateUI("UEFI Mode", "Hệ thống đang chạy UEFI. Có thể tạo shortcut.", Color.LightGreen);
                 btnCreateShortcut.Visible = true;
                 btnStartCheck.Enabled = false;
             }
             else
             {
-                UpdateUI("MBR/Legacy", "Hardware supports UEFI but Windows is running in Legacy (MBR) mode.", Color.Khaki);
+                UpdateUI("MBR/Legacy", "Phần cứng hỗ trợ UEFI nhưng Windows đang chạy ở chế độ Legacy (MBR).", Color.Khaki);
                 btnCreateShortcut.Visible = false;
-                MessageBox.Show("To use the shortcut, convert the disk to GPT and reinstall Windows in UEFI mode.", "Note");
+                MessageBox.Show("Để dùng shortcut, cần chuyển đĩa sang GPT và cài lại Windows ở chế độ UEFI.", "Lưu ý");
                 return;
             }
         }
@@ -151,13 +151,18 @@ namespace frmbootobios
                     new object[] { Path.Combine(Path.Combine(Environment.GetEnvironmentVariable("SystemRoot"), "System32"), "shell32.dll") + ",238" });
                 shortcutType.InvokeMember("Save", BindingFlags.InvokeMethod, null, shortcut, null);
 
-                MessageBox.Show("Shortcut created on Desktop!", "Success!");
+                MessageBox.Show("Đã tạo shortcut trên Desktop!", "Thành công!");
                 Application.Exit();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Shortcut creation failed: " + ex.Message);
+                MessageBox.Show("Tạo shortcut thất bại: " + ex.Message);
             }
+        }
+
+        private void btnCheckWin11_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Tính năng này chỉ có trong bản NET40.", "Thông báo");
         }
 
         private void Form1_Load(object sender, EventArgs e)

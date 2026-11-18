@@ -107,7 +107,7 @@
             this.lblStatusText.Name = "lblStatusText";
             this.lblStatusText.Size = new System.Drawing.Size(151, 18);
             this.lblStatusText.TabIndex = 1;
-            this.lblStatusText.Text = "\"Đang chờ kiểm tra...\"";
+            this.lblStatusText.Text = "Đang chờ kiểm tra...";
             //
             // btnStartCheck
             //
@@ -115,7 +115,7 @@
             this.btnStartCheck.Name = "btnStartCheck";
             this.btnStartCheck.Size = new System.Drawing.Size(84, 44);
             this.btnStartCheck.TabIndex = 2;
-            this.btnStartCheck.Text = "Start Check";
+            this.btnStartCheck.Text = "Kiểm tra BIOS";
             this.btnStartCheck.UseVisualStyleBackColor = true;
             this.btnStartCheck.Click += new System.EventHandler(this.btnStartCheck_Click);
             //
@@ -125,7 +125,7 @@
             this.btnCheckWin11.Name = "btnCheckWin11";
             this.btnCheckWin11.Size = new System.Drawing.Size(120, 44);
             this.btnCheckWin11.TabIndex = 4;
-            this.btnCheckWin11.Text = "Win 11 Ready?";
+            this.btnCheckWin11.Text = "Kiểm tra Win 11";
             this.btnCheckWin11.UseVisualStyleBackColor = true;
             this.btnCheckWin11.Click += new System.EventHandler(this.btnCheckWin11_Click);
             //
@@ -135,7 +135,7 @@
             this.btnCreateShortcut.Name = "btnCreateShortcut";
             this.btnCreateShortcut.Size = new System.Drawing.Size(84, 44);
             this.btnCreateShortcut.TabIndex = 3;
-            this.btnCreateShortcut.Text = "Create Shortcut";
+            this.btnCreateShortcut.Text = "Tạo Shortcut";
             this.btnCreateShortcut.UseVisualStyleBackColor = true;
             this.btnCreateShortcut.Click += new System.EventHandler(this.btnCreateShortcut_Click);
             //
@@ -154,7 +154,7 @@
             this.groupBox5.Size = new System.Drawing.Size(475, 135);
             this.groupBox5.TabIndex = 3;
             this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Windows 11 Requirements";
+            this.groupBox5.Text = "Yêu cầu Windows 11";
             this.groupBox5.Visible = false;
             //
             // lblW11OsVersion

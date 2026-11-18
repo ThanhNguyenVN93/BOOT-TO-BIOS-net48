@@ -29,7 +29,7 @@ namespace frmbootobios
         public Form1()
         {
             InitializeComponent();
-            lblStatusText.Text = "Ready to run system check...";
+            lblStatusText.Text = "Sẵn sàng kiểm tra...";
             btnCreateShortcut.Visible = false;
         }
 
@@ -39,7 +39,7 @@ namespace frmbootobios
 
             if (!hardwareSupport)
             {
-                UpdateUI("Legacy Only", "Hardware does not support UEFI.", Color.LightCoral);
+                UpdateUI("Legacy Only", "Phần cứng không hỗ trợ UEFI.", Color.LightCoral);
                 btnCreateShortcut.Visible = false;
                 return;
             }
@@ -48,16 +48,16 @@ namespace frmbootobios
 
             if (isWindowsUEFI)
             {
-                UpdateUI("UEFI Mode", "System is running UEFI. You can create a shortcut.", Color.LightGreen);
+                UpdateUI("UEFI Mode", "Hệ thống đang chạy UEFI. Có thể tạo shortcut.", Color.LightGreen);
                 btnCreateShortcut.Visible = true;
                 
                 btnStartCheck.Enabled = false;
             }
             else
             {
-                UpdateUI("MBR/Legacy", "Hardware supports UEFI but Windows is running in Legacy (MBR) mode.", Color.Khaki);
+                UpdateUI("MBR/Legacy", "Phần cứng hỗ trợ UEFI nhưng Windows đang chạy ở chế độ Legacy (MBR).", Color.Khaki);
                 btnCreateShortcut.Visible = false;
-                MessageBox.Show("To use the shortcut, convert the disk to GPT and reinstall Windows in UEFI mode.", "Note");
+                MessageBox.Show("Để dùng shortcut, cần chuyển đĩa sang GPT và cài lại Windows ở chế độ UEFI.", "Lưu ý");
                 return;
             }
         }
@@ -149,12 +149,12 @@ namespace frmbootobios
                 shortcut.IconLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "shell32.dll") + ",238";
                 shortcut.Save();
 
-                MessageBox.Show("Shortcut created on Desktop!", "Success!");
+                MessageBox.Show("Đã tạo shortcut trên Desktop!", "Thành công!");
                 Application.Exit();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Shortcut creation failed: " + ex.Message);
+                MessageBox.Show("Tạo shortcut thất bại: " + ex.Message);
             }
         }
 
@@ -176,7 +176,7 @@ namespace frmbootobios
                 }
             }
             catch { }
-            lblW11OsVersion.Text = "OS: " + osCaption + (osArch.Length > 0 ? " – " + osArch : "");
+            lblW11OsVersion.Text = "HĐH: " + osCaption + (osArch.Length > 0 ? " – " + osArch : "");
 
             bool alreadyWin11 = osCaption.IndexOf("Windows 11", StringComparison.OrdinalIgnoreCase) >= 0;
 
@@ -242,8 +242,8 @@ namespace frmbootobios
             SetCheck(lblW11Uefi, uefi, "UEFI");
             SetCheck(lblW11Tpm, tpm2, "TPM 2.0");
             SetCheck(lblW11SecureBoot, secureBoot, "Secure Boot");
-            SetCheck(lblW11Gpt, gpt, "GPT Disk");
-            SetCheck(lblW11Ram, ram4gb, "RAM ≥ 4GB");
+            SetCheck(lblW11Gpt, gpt, "Ổ đĩa GPT");
+            SetCheck(lblW11Ram, ram4gb, "RAM ≥ 4 GB");
             SetCheck(lblW11Cpu, cpu64, "CPU 64-bit");
 
             bool ready = uefi && tpm2 && secureBoot && gpt && ram4gb && cpu64;
