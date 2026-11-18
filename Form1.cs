@@ -11,17 +11,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using Microsoft.Win32;
 
 namespace frmbootobios
 {
     public partial class Form1 : Form
     {
-        // Thư viện để tắt cơ chế điều hướng file của Windows
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern bool Wow64DisableWow64FsRedirection(ref IntPtr ptr);
 
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern bool Wow64RevertWow64FsRedirection(IntPtr ptr);
+
+        // Win8+ API: 1=Legacy/BIOS, 2=UEFI
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool GetFirmwareType(ref uint FirmwareType);
         public Form1()
         {
             InitializeComponent();
@@ -89,6 +93,10 @@ namespace frmbootobios
         }
         private bool CheckWindowsBootMode()
         {
+            uint firmwareType = 0;
+            if (GetFirmwareType(ref firmwareType))
+                return firmwareType == 2;
+            // Fallback for pre-Win8
             string bcdPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "bcdedit.exe");
             string output = RunCommand(bcdPath, "");
             return output.Contains("winload.efi");
@@ -148,6 +156,88 @@ namespace frmbootobios
             {
                 MessageBox.Show("Shortcut creation failed: " + ex.Message);
             }
+        }
+
+        private void btnCheckWin11_Click(object sender, EventArgs e)
+        {
+            bool uefi = CheckWindowsBootMode();
+
+            bool tpm2 = false;
+            try
+            {
+                var searcher = new ManagementObjectSearcher(@"root\CIMv2\Security\MicrosoftTpm", "SELECT * FROM Win32_Tpm");
+                foreach (ManagementObject obj in searcher.Get())
+                {
+                    string spec = obj["SpecVersion"]?.ToString() ?? "";
+                    tpm2 = spec.StartsWith("2.");
+                    break;
+                }
+            }
+            catch { }
+
+            bool secureBoot = false;
+            try
+            {
+                using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\SecureBoot\State"))
+                    if (key != null)
+                        secureBoot = (int)key.GetValue("UEFISecureBootEnabled", 0) == 1;
+            }
+            catch { }
+
+            bool gpt = false;
+            try
+            {
+                var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_DiskPartition WHERE DiskIndex=0");
+                foreach (ManagementObject obj in searcher.Get())
+                {
+                    if ((obj["Type"]?.ToString() ?? "").StartsWith("GPT:")) { gpt = true; break; }
+                }
+            }
+            catch { }
+
+            bool ram4gb = false;
+            try
+            {
+                var searcher = new ManagementObjectSearcher("SELECT TotalPhysicalMemory FROM Win32_ComputerSystem");
+                foreach (ManagementObject obj in searcher.Get())
+                {
+                    ram4gb = (ulong)obj["TotalPhysicalMemory"] >= 4UL * 1024 * 1024 * 1024;
+                    break;
+                }
+            }
+            catch { }
+
+            bool cpu64 = false;
+            try
+            {
+                var searcher = new ManagementObjectSearcher("SELECT AddressWidth FROM Win32_Processor");
+                foreach (ManagementObject obj in searcher.Get())
+                {
+                    cpu64 = (ushort)obj["AddressWidth"] == 64;
+                    break;
+                }
+            }
+            catch { }
+
+            SetCheck(lblW11Uefi, uefi, "UEFI");
+            SetCheck(lblW11Tpm, tpm2, "TPM 2.0");
+            SetCheck(lblW11SecureBoot, secureBoot, "Secure Boot");
+            SetCheck(lblW11Gpt, gpt, "GPT Disk");
+            SetCheck(lblW11Ram, ram4gb, "RAM ≥ 4GB");
+            SetCheck(lblW11Cpu, cpu64, "CPU 64-bit");
+
+            bool ready = uefi && tpm2 && secureBoot && gpt && ram4gb && cpu64;
+            lblW11Result.Text = ready ? "✓  Máy có thể nâng cấp Windows 11" : "✗  Chưa đủ điều kiện nâng cấp Windows 11";
+            lblW11Result.ForeColor = ready ? Color.DarkGreen : Color.DarkRed;
+
+            groupBox5.Visible = true;
+            this.ClientSize = new System.Drawing.Size(480, 370);
+        }
+
+        private void SetCheck(Label lbl, bool ok, string name)
+        {
+            lbl.Text = (ok ? "✓ " : "✗ ") + name;
+            lbl.ForeColor = ok ? Color.DarkGreen : Color.Red;
         }
 
         private void Form1_Load(object sender, EventArgs e)
