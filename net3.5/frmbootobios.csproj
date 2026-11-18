@@ -35,7 +35,7 @@
     <ApplicationManifest>..\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>..\shell32_16739.ico</ApplicationIcon>
+    <ApplicationIcon>shell32_238.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -93,9 +93,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\shell32_16739.ico">
-      <Link>shell32_16739.ico</Link>
-    </Content>
+    <Content Include="shell32_238.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
