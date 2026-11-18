@@ -160,6 +160,26 @@ namespace frmbootobios
 
         private void btnCheckWin11_Click(object sender, EventArgs e)
         {
+            // Source - https://stackoverflow.com/a/50224392 (Rovann Linhalis, CC BY-SA 4.0)
+            string osCaption = "";
+            string osArch = "";
+            try
+            {
+                using (var osSearcher = new ManagementObjectSearcher("SELECT Caption, OSArchitecture FROM Win32_OperatingSystem"))
+                {
+                    foreach (ManagementObject obj in osSearcher.Get())
+                    {
+                        osCaption = obj["Caption"]?.ToString() ?? "";
+                        osArch = obj["OSArchitecture"]?.ToString() ?? "";
+                        break;
+                    }
+                }
+            }
+            catch { }
+            lblW11OsVersion.Text = "OS: " + osCaption + (osArch.Length > 0 ? " – " + osArch : "");
+
+            bool alreadyWin11 = osCaption.IndexOf("Windows 11", StringComparison.OrdinalIgnoreCase) >= 0;
+
             bool uefi = CheckWindowsBootMode();
 
             bool tpm2 = false;
@@ -227,11 +247,24 @@ namespace frmbootobios
             SetCheck(lblW11Cpu, cpu64, "CPU 64-bit");
 
             bool ready = uefi && tpm2 && secureBoot && gpt && ram4gb && cpu64;
-            lblW11Result.Text = ready ? "✓  Máy có thể nâng cấp Windows 11" : "✗  Chưa đủ điều kiện nâng cấp Windows 11";
-            lblW11Result.ForeColor = ready ? Color.DarkGreen : Color.DarkRed;
+            if (alreadyWin11)
+            {
+                lblW11Result.Text = "✓  Máy đang chạy Windows 11";
+                lblW11Result.ForeColor = Color.DarkGreen;
+            }
+            else if (ready)
+            {
+                lblW11Result.Text = "✓  Máy có thể nâng cấp Windows 11";
+                lblW11Result.ForeColor = Color.DarkGreen;
+            }
+            else
+            {
+                lblW11Result.Text = "✗  Chưa đủ điều kiện nâng cấp Windows 11";
+                lblW11Result.ForeColor = Color.DarkRed;
+            }
 
             groupBox5.Visible = true;
-            this.ClientSize = new System.Drawing.Size(480, 370);
+            this.ClientSize = new System.Drawing.Size(480, 396);
         }
 
         private void SetCheck(Label lbl, bool ok, string name)

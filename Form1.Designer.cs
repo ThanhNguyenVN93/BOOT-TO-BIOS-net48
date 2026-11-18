@@ -46,6 +46,7 @@
             this.lblW11Gpt = new System.Windows.Forms.Label();
             this.lblW11Ram = new System.Windows.Forms.Label();
             this.lblW11Cpu = new System.Windows.Forms.Label();
+            this.lblW11OsVersion = new System.Windows.Forms.Label();
             this.lblW11Result = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -147,19 +148,30 @@
             this.groupBox5.Controls.Add(this.lblW11SecureBoot);
             this.groupBox5.Controls.Add(this.lblW11Tpm);
             this.groupBox5.Controls.Add(this.lblW11Uefi);
+            this.groupBox5.Controls.Add(this.lblW11OsVersion);
             this.groupBox5.Location = new System.Drawing.Point(3, 251);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(475, 110);
+            this.groupBox5.Size = new System.Drawing.Size(475, 135);
             this.groupBox5.TabIndex = 3;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Windows 11 Requirements";
             this.groupBox5.Visible = false;
             //
+            // lblW11OsVersion
+            //
+            this.lblW11OsVersion.AutoSize = false;
+            this.lblW11OsVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.lblW11OsVersion.Location = new System.Drawing.Point(5, 20);
+            this.lblW11OsVersion.Name = "lblW11OsVersion";
+            this.lblW11OsVersion.Size = new System.Drawing.Size(460, 18);
+            this.lblW11OsVersion.TabIndex = 7;
+            this.lblW11OsVersion.Text = "";
+            //
             // lblW11Uefi
             //
             this.lblW11Uefi.AutoSize = true;
             this.lblW11Uefi.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.lblW11Uefi.Location = new System.Drawing.Point(5, 22);
+            this.lblW11Uefi.Location = new System.Drawing.Point(5, 44);
             this.lblW11Uefi.Name = "lblW11Uefi";
             this.lblW11Uefi.Size = new System.Drawing.Size(40, 15);
             this.lblW11Uefi.TabIndex = 0;
@@ -169,7 +181,7 @@
             //
             this.lblW11Tpm.AutoSize = true;
             this.lblW11Tpm.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.lblW11Tpm.Location = new System.Drawing.Point(165, 22);
+            this.lblW11Tpm.Location = new System.Drawing.Point(165, 44);
             this.lblW11Tpm.Name = "lblW11Tpm";
             this.lblW11Tpm.Size = new System.Drawing.Size(50, 15);
             this.lblW11Tpm.TabIndex = 1;
@@ -179,7 +191,7 @@
             //
             this.lblW11SecureBoot.AutoSize = true;
             this.lblW11SecureBoot.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.lblW11SecureBoot.Location = new System.Drawing.Point(325, 22);
+            this.lblW11SecureBoot.Location = new System.Drawing.Point(325, 44);
             this.lblW11SecureBoot.Name = "lblW11SecureBoot";
             this.lblW11SecureBoot.Size = new System.Drawing.Size(80, 15);
             this.lblW11SecureBoot.TabIndex = 2;
@@ -189,7 +201,7 @@
             //
             this.lblW11Gpt.AutoSize = true;
             this.lblW11Gpt.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.lblW11Gpt.Location = new System.Drawing.Point(5, 50);
+            this.lblW11Gpt.Location = new System.Drawing.Point(5, 70);
             this.lblW11Gpt.Name = "lblW11Gpt";
             this.lblW11Gpt.Size = new System.Drawing.Size(55, 15);
             this.lblW11Gpt.TabIndex = 3;
@@ -199,7 +211,7 @@
             //
             this.lblW11Ram.AutoSize = true;
             this.lblW11Ram.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.lblW11Ram.Location = new System.Drawing.Point(165, 50);
+            this.lblW11Ram.Location = new System.Drawing.Point(165, 70);
             this.lblW11Ram.Name = "lblW11Ram";
             this.lblW11Ram.Size = new System.Drawing.Size(60, 15);
             this.lblW11Ram.TabIndex = 4;
@@ -209,7 +221,7 @@
             //
             this.lblW11Cpu.AutoSize = true;
             this.lblW11Cpu.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.lblW11Cpu.Location = new System.Drawing.Point(325, 50);
+            this.lblW11Cpu.Location = new System.Drawing.Point(325, 70);
             this.lblW11Cpu.Name = "lblW11Cpu";
             this.lblW11Cpu.Size = new System.Drawing.Size(65, 15);
             this.lblW11Cpu.TabIndex = 5;
@@ -219,7 +231,7 @@
             //
             this.lblW11Result.AutoSize = false;
             this.lblW11Result.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.lblW11Result.Location = new System.Drawing.Point(5, 78);
+            this.lblW11Result.Location = new System.Drawing.Point(5, 100);
             this.lblW11Result.Name = "lblW11Result";
             this.lblW11Result.Size = new System.Drawing.Size(460, 22);
             this.lblW11Result.TabIndex = 6;
@@ -230,7 +242,7 @@
             //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(480, 370);
+            this.ClientSize = new System.Drawing.Size(480, 396);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox2);
@@ -270,6 +282,7 @@
         private System.Windows.Forms.Label lblW11Ram;
         private System.Windows.Forms.Label lblW11Cpu;
         private System.Windows.Forms.Label lblW11Result;
+        private System.Windows.Forms.Label lblW11OsVersion;
     }
 }
 
