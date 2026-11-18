@@ -7,7 +7,7 @@
     <ProjectGuid>{AE14C38A-7186-49E2-BB98-58A7726F662A}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>frmbootobios</RootNamespace>
-    <AssemblyName>BOOT TO BIOS</AssemblyName>
+    <AssemblyName>BOOT TO BIOS (NET35)</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

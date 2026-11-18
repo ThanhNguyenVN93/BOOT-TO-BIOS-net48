@@ -80,7 +80,7 @@ namespace frmbootobios
                 }
 
                 // Cách 2: Chạy bcdedit với việc tắt redirection
-                string bcdPath = Path.Combine(Environment.GetEnvironmentVariable("SystemRoot"), "System32", "bcdedit.exe");
+                string bcdPath = Path.Combine(Path.Combine(Environment.GetEnvironmentVariable("SystemRoot"), "System32"), "bcdedit.exe");
                 string output = RunCommand(bcdPath, "/enum firmware");
 
                 if (output.Contains(".efi") || output.Contains("{fwbootmgr}")) return true;
@@ -91,7 +91,7 @@ namespace frmbootobios
 
         private bool CheckWindowsBootMode()
         {
-            string bcdPath = Path.Combine(Environment.GetEnvironmentVariable("SystemRoot"), "System32", "bcdedit.exe");
+            string bcdPath = Path.Combine(Path.Combine(Environment.GetEnvironmentVariable("SystemRoot"), "System32"), "bcdedit.exe");
             string output = RunCommand(bcdPath, "");
             return output.Contains("winload.efi");
         }
@@ -142,13 +142,13 @@ namespace frmbootobios
                 Type shortcutType = shortcut.GetType();
 
                 shortcutType.InvokeMember("TargetPath", BindingFlags.SetProperty, null, shortcut,
-                    new object[] { Path.Combine(Environment.GetEnvironmentVariable("SystemRoot"), "System32", "shutdown.exe") });
+                    new object[] { Path.Combine(Path.Combine(Environment.GetEnvironmentVariable("SystemRoot"), "System32"), "shutdown.exe") });
                 shortcutType.InvokeMember("Arguments", BindingFlags.SetProperty, null, shortcut,
                     new object[] { "/r /fw /t 0" });
                 shortcutType.InvokeMember("Description", BindingFlags.SetProperty, null, shortcut,
                     new object[] { "Restart the system and enter BIOS directly" });
                 shortcutType.InvokeMember("IconLocation", BindingFlags.SetProperty, null, shortcut,
-                    new object[] { Path.Combine(Environment.GetEnvironmentVariable("SystemRoot"), "System32", "shell32.dll") + ",238" });
+                    new object[] { Path.Combine(Path.Combine(Environment.GetEnvironmentVariable("SystemRoot"), "System32"), "shell32.dll") + ",238" });
                 shortcutType.InvokeMember("Save", BindingFlags.InvokeMethod, null, shortcut, null);
 
                 MessageBox.Show("Shortcut created on Desktop!", "Success!");
